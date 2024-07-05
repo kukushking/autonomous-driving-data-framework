@@ -46,14 +46,14 @@ class DagIamRole(Stack):
             iam.PolicyStatement(
                 actions=["s3:ListBucket", "s3:GetObject*"],
                 effect=iam.Effect.ALLOW,
-                resources=["arn:aws:s3:::tripdata", "arn:aws:s3:::tripdata/*"],
+                resources=[f"arn:{self.partition}:s3:::tripdata", f"arn:{self.partition}:s3:::tripdata/*"],
             ),
             iam.PolicyStatement(
                 actions=["s3:*"],
                 effect=iam.Effect.ALLOW,
                 resources=[
-                    f"arn:aws:s3:::{raw_bucket_name}",
-                    f"arn:aws:s3:::{raw_bucket_name}/*",
+                    f"arn:{self.partition}:s3:::{raw_bucket_name}",
+                    f"arn:{self.partition}:s3:::{raw_bucket_name}/*",
                 ],
             ),
             iam.PolicyStatement(
@@ -69,7 +69,7 @@ class DagIamRole(Stack):
             iam.PolicyStatement(
                 actions=["kms:Decrypt", "kms:GenerateDataKey"],
                 effect=iam.Effect.ALLOW,
-                resources=[f"arn:aws:kms:{self.region}:{self.account}:key/*"],
+                resources=[f"arn:{self.partition}:kms:{self.region}:{self.account}:key/*"],
             ),
         ]
         dag_document = iam.PolicyDocument(statements=policy_statements)

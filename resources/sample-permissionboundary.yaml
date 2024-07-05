@@ -25,7 +25,7 @@ Resources:
               - 'iam:PutRolePolicy'
             Condition:
               StringEquals:
-                'iam:PermissionsBoundary': !Sub 'arn:aws:iam::${AWS::AccountId}:policy/${ManagedPolicyName}'
+                'iam:PermissionsBoundary': !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${ManagedPolicyName}'
             Effect: Allow
             Resource: '*'
             Sid: CreateOrChangeOnlyWithBoundary
@@ -36,22 +36,22 @@ Resources:
               - 'iam:SetDefaultPolicyVersion'
             Effect: Deny
             Resource:
-              - !Sub 'arn:aws:iam::${AWS::AccountId}:policy/${ManagedPolicyName}'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${ManagedPolicyName}'
             Sid: DenyPermBoundaryIAMPolicyAlteration
           - Action:
               - 'iam:DeleteUserPermissionsBoundary'
               - 'iam:DeleteRolePermissionsBoundary'
             Condition:
               StringEquals:
-                'iam:PermissionsBoundary': !Sub 'arn:aws:iam::${AWS::AccountId}:policy/${ManagedPolicyName}'
+                'iam:PermissionsBoundary': !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${ManagedPolicyName}'
             Effect: Deny
             Resource:
-              - !Sub 'arn:aws:iam::${AWS::AccountId}:user/*'
-              - !Sub 'arn:aws:iam::${AWS::AccountId}:role/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:user/*'
+              - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/*'
             Sid: DenyRemovalOfPermBoundaryFromAnyUserOrRole
           - Action: 'iam:PassRole'
             Effect: Deny
-            Resource: !Sub 'arn:aws:iam::${AWS::AccountId}:role/*'
+            Resource: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/*'
             Sid: DenyIAMPassRoleEscalation
         Version: 2012-10-17
     Type: 'AWS::IAM::ManagedPolicy'

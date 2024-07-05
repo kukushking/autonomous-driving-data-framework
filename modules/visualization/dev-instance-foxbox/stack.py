@@ -128,21 +128,21 @@ class DataServiceDevInstancesStack(Stack):
             "sid": "AllowDCVLicense",
             "Effect": "Allow",
             "Action": ["s3:GetObject"],
-            "Resource": [f"arn:aws:s3:::dcv-license.{region}/*"],
+            "Resource": [f"arn:{self.partition}:s3:::dcv-license.{region}/*"],
         }
 
         custom_policies["s3"] = {
             "sid": "AllowADDFS3Buckets",
             "Effect": "Allow",
             "Action": ["s3:Get*", "s3:List*", "s3:PutObject*", "s3:DeleteObject*"],
-            "Resource": [f"arn:aws:s3:::{project_name}*", f"arn:aws:s3:::{project_name}*/*"],
+            "Resource": [f"arn:{self.partition}:s3:::{project_name}*", f"arn:{self.partition}:s3:::{project_name}*/*"],
         }
 
         custom_policies["lambda"] = {
             "sid": "AllowADDFLambdas",
             "Effect": "Allow",
             "Action": ["lambda:Invoke*"],
-            "Resource": [f"arn:aws:lambda:{self.region}:{self.account}:function:{project_name}-*"],
+            "Resource": [f"arn:{self.partition}:lambda:{self.region}:{self.account}:function:{project_name}-*"],
         }
 
         if s3_bucket_dataset:
@@ -151,8 +151,8 @@ class DataServiceDevInstancesStack(Stack):
                 "Effect": "Allow",
                 "Action": ["s3:Get*", "s3:List*"],
                 "Resource": [
-                    f"arn:aws:s3:::{s3_bucket_dataset}",
-                    f"arn:aws:s3:::{s3_bucket_dataset}/*",
+                    f"arn:{self.partition}:s3:::{s3_bucket_dataset}",
+                    f"arn:{self.partition}:s3:::{s3_bucket_dataset}/*",
                 ],
             }
 
